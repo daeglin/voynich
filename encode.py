@@ -1,6 +1,6 @@
 #!/usr/bin/python
-# This is a prototype of an algorithm generating Voynich like ciphertext.
-# Preprint of the paper explaing why I believe this is the right solution
+# This is a prototype of an algorithm generating Voynich-like ciphertext.
+# Preprint of the paper explaining why I believe this is the right solution
 # to the puzzle is comming soon.
 # Copyright (C) Michal Benes 2014
 #
