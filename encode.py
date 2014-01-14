@@ -1,59 +1,48 @@
 #!/usr/bin/python
 # This is a prototype of an algorithm generating Voynich like ciphertext.
-# Preprint of a paper explaing the why I believe this is the right solution
+# Preprint of the paper explaing why I believe this is the right solution
 # to the puzzle is comming soon.
-# Copyright (C) Michal Benes January 13th 2014
+# Copyright (C) Michal Benes 2014
+#
+# History:
+# January 12th 2014 - First version
+# January 14th 2014 - Working version
 
 import sys
 
 line = sys.stdin.readline().strip()
 
-#alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456"
-alphabet = "EITAUSRNMOCDLPQBVHGFXJYZKW123456"
+CUT = 10  # >= 8
+alphabet = "EITAUSRNMOCDLPQBVHGFXJYZ"
+alphabet2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 
-code = {}
-n = 0
+value = {}
+base = 0
 for i in alphabet:
-    code[i] = n
-    n += 1
+    mult = 1
+    if i >= CUT:
+        mult = 2
+    value[i] = (base, mult)
+    base += mult
 
-class Coder:
-    def __init__(self):
-        self.fr = [10,5]
-        self.st = 0.0
-
-    def update(self, v):
-        self.fr[v] += 1
-        q = float(self.fr[0])/(self.fr[0]+self.fr[1])
-        if v > 0:
-            self.st += 1.0
-
-        if self.st > 10.0:
-            self.st = 0.0
-
-        if self.st >= 1.0:
-            res = 1
-            self.st -= q
-        else:
-            res = 0
-
-        return res
-
+state = 0
+mult = 1
 res = ""
-coders = []
-for i in range(5):
-    coders.append(Coder())
-
 for a in line:
-    r = 0
-    n = 0
-    c = code[a]
-    for i in [1, 2, 4, 8, 16]:
-        r = r * 2 + coders[n].update((c & i) / i)
-        n += 1
-    res += alphabet[r]
+    v = value[a]
+    state = state * base * mult + v[0] * mult
+    c = state / mult
+    res += alphabet2[c]
+    state = state - c * mult
+
+    mult *= v[1]
+
+    while mult > 1 and state % 2 == 0:
+        mult /= 2
+        state /= 2
+
+    if mult > 1024 * 1024:
+        mult /= 2
+        res += "1"
 
 print res
-#for i in range(5):
-#    print coders[i].hit, coders[i].miss
-
