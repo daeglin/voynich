@@ -3,6 +3,7 @@
 # Preprint of the paper explaining why I believe this is the right solution
 # to the puzzle is comming soon.
 # Copyright (C) Michal Benes 2014
+# michal.benes.cz@gmail.com
 #
 # History:
 # January 12th 2014 - First version
